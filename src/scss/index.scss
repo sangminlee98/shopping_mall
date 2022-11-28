@@ -1,2 +1,25 @@
 @import "reset";
 @import "products";
+@import "cart";
+
+#root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.gnb {
+  padding: 30px 0;
+  ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+  }
+  li {
+    color: #757575;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
