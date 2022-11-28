@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.18.0",
+    "@tanstack/react-query-devtools": "^4.18.0",
+    "axios": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3"
@@ -19,6 +22,7 @@
     "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
-    "vite-plugin-next-react-router": "^0.6.2"
+    "vite-plugin-next-react-router": "^0.6.2",
+    "sass": "^1.56.1"
   }
 }
