@@ -1,9 +1,12 @@
 import { Cart, DELETE_CART, UPDATE_CART } from "@/graphql/cart";
 import { getClient, graphqlFetcher, QueryKeys } from "@/queryClient";
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
+import React, { ForwardedRef, forwardRef, RefObject } from "react";
 
-export default function CartItem({ id, imageUrl, price, title, amount }: Cart) {
+function CartItem(
+  { id, imageUrl, price, title, amount }: Cart,
+  ref: ForwardedRef<HTMLInputElement>
+) {
   const queryClient = getClient();
   const { mutate: updateCart } = useMutation(
     ({ id, amount }: { id: string; amount: number }) =>
@@ -44,6 +47,7 @@ export default function CartItem({ id, imageUrl, price, title, amount }: Cart) {
   );
   const handleUpdateAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const amount = Number(e.target.value);
+    if (amount < 1) return;
     updateCart({ id, amount });
   };
   const handleDeleteCart = () => {
@@ -51,7 +55,12 @@ export default function CartItem({ id, imageUrl, price, title, amount }: Cart) {
   };
   return (
     <li className="cart-item">
-      <input className="cart-item__checkbox" type="checkbox" />
+      <input
+        className="cart-item__checkbox"
+        type="checkbox"
+        name="select-item"
+        ref={ref}
+      />
       <img className="cart-item__image" src={imageUrl} />
       <p className="cart-item__price">{price}</p>
       <p className="cart-item__title">{title}</p>
@@ -59,6 +68,7 @@ export default function CartItem({ id, imageUrl, price, title, amount }: Cart) {
         className="cart-item__amount"
         type="number"
         value={amount}
+        min={1}
         onChange={handleUpdateAmount}
       />
       <button
@@ -71,3 +81,5 @@ export default function CartItem({ id, imageUrl, price, title, amount }: Cart) {
     </li>
   );
 }
+
+export default forwardRef(CartItem);
