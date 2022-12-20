@@ -1,10 +1,11 @@
-import { Cart, DELETE_CART, UPDATE_CART } from "@/graphql/cart";
+import { CartType, DELETE_CART, UPDATE_CART } from "@/graphql/cart";
 import { getClient, graphqlFetcher, QueryKeys } from "@/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import React, { ForwardedRef, forwardRef, RefObject } from "react";
+import ItemData from "./itemData";
 
 function CartItem(
-  { id, imageUrl, price, title, amount }: Cart,
+  { id, imageUrl, price, title, amount }: CartType,
   ref: ForwardedRef<HTMLInputElement>
 ) {
   const queryClient = getClient();
@@ -14,7 +15,7 @@ function CartItem(
     {
       onMutate: async ({ id, amount }) => {
         await queryClient.cancelQueries([QueryKeys.CART]);
-        const prevCart = queryClient.getQueryData<{ [key: string]: Cart }>([
+        const prevCart = queryClient.getQueryData<{ [key: string]: CartType }>([
           QueryKeys.CART,
         ]);
         if (!prevCart?.[id]) return prevCart;
@@ -26,7 +27,7 @@ function CartItem(
         return prevCart;
       },
       onSuccess: (newValue) => {
-        const prevCart = queryClient.getQueryData<{ [key: string]: Cart }>([
+        const prevCart = queryClient.getQueryData<{ [key: string]: CartType }>([
           QueryKeys.CART,
         ]);
         const newCart = {
@@ -60,10 +61,9 @@ function CartItem(
         type="checkbox"
         name="select-item"
         ref={ref}
+        data-id={id}
       />
-      <img className="cart-item__image" src={imageUrl} />
-      <p className="cart-item__price">{price}</p>
-      <p className="cart-item__title">{title}</p>
+      <ItemData imageUrl={imageUrl} price={price} title={title} />
       <input
         className="cart-item__amount"
         type="number"
