@@ -9,9 +9,11 @@ import React, {
 } from "react";
 import { useRecoilState } from "recoil";
 import CartItem from "./item";
-import WillPay from "./willPay";
+import WillPay from "@/components/willPay";
+import { useNavigate } from "react-router-dom";
 
 export default function CartList({ items }: { items: CartType[] }) {
+  const navigate = useNavigate();
   const [checkedCartData, setCheckedCartData] =
     useRecoilState(checkedCartState);
   const formRef = useRef<HTMLFormElement>(null);
@@ -49,6 +51,13 @@ export default function CartList({ items }: { items: CartType[] }) {
     const data = new FormData(formRef.current);
     setFormData(data);
   };
+  const handleSubmit = () => {
+    if (checkedCartData.length) {
+      navigate("/payment");
+    } else {
+      alert("결제할 대상이 없어요");
+    }
+  };
 
   useEffect(() => {
     checkedCartData.forEach((item) => {
@@ -80,7 +89,7 @@ export default function CartList({ items }: { items: CartType[] }) {
           ))}
         </ul>
       </form>
-      <WillPay />
+      <WillPay handleSubmit={handleSubmit} submitTitle="결제창으로" />
     </div>
   );
 }
